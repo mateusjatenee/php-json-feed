@@ -9,6 +9,23 @@ This library provides a way to generate [JSON feeds](https://jsonfeed.org), a fo
 $ composer require mateusjatenee/laravel-json-feed
 ```
 
+#### Laravel Installation   
+
+On your `config/app.php` file, register the service provider:   
+```php   
+'providers' => [
+    ...
+    Mateusjatenee\JsonFeed\JsonFeedServiceProvider::class,
+];
+```   
+And on the `aliases` array, register the facade:   
+```php   
+'aliases' => [
+		...
+		'JsonFeed' => Mateusjatenee\JsonFeed\Facades\JsonFeed::class,
+];
+```
+
 #### Usage   
 The library is really simple to use and actually does not depend on Laravel itself, though it allows you to use a config file (not yet). It automatically filters formats the JSON and removes any unnecessary property. 
 
