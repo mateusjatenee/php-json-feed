@@ -96,6 +96,22 @@ class JsonFeedTest extends TestCase
     }
 
     /** @test */
+    public function it_sets_the_config()
+    {
+        $feed = app('jsonFeed')->setConfig($config = $this->getJsonFeedConfig());
+
+        $this->assertEquals(count($config), $feed->getConfig()->count());
+    }
+
+    /** @test */
+    public function it_sets_the_items()
+    {
+        $feed = app('jsonFeed')->setItems($items = $this->getArrayOfItems());
+
+        $this->assertEquals(count($items), $feed->getItems()->count());
+    }
+
+    /** @test */
     public function it_builds_a_complete_json_feed()
     {
         $feed = JsonFeed::start(

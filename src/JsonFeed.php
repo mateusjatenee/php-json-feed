@@ -45,10 +45,10 @@ class JsonFeed
      * @param array $properties
      * @param array $items
      */
-    public function __construct(array $properties = [], $items = [])
+    public function __construct($properties = [], $items = [])
     {
-        $this->properties = new Collection($properties);
-        $this->items = $items instanceof Collection ? $items : new Collection($items);
+        $this->properties = $this->makeCollection($properties);
+        $this->items = $this->makeCollection($items);
     }
 
     /**
@@ -111,9 +111,28 @@ class JsonFeed
         return $this->acceptedProperties;
     }
 
+    public function setItems($items)
+    {
+        $this->items = $this->makeCollection($items);
+
+        return $this;
+    }
+
     public function getItems()
     {
         return $this->items;
+    }
+
+    public function setConfig($config)
+    {
+        $this->properties = $this->makeCollection($config);
+
+        return $this;
+    }
+
+    public function getConfig()
+    {
+        return $this->properties;
     }
 
     /**
@@ -162,6 +181,11 @@ class JsonFeed
     public function getVersion()
     {
         return $this->version;
+    }
+
+    protected function makeCollection($items)
+    {
+        return $items instanceof Collection ? $items : new Collection($items);
     }
 
     /**
