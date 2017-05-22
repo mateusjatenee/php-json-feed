@@ -56,4 +56,22 @@ class JsonFeedTest extends TestCase
 
         JsonFeed::start($properties)->toArray();
     }
+
+    /** @test */
+    public function it_automatically_sets_the_version()
+    {
+        $this->assertEquals('https://jsonfeed.org/version/1', JsonFeed::start()->getVersion());
+    }
+
+    /** @test */
+    public function it_automatically_gets_properties()
+    {
+        $feed = JsonFeed::start([
+            'description' => 'bar',
+            'home_page_url' => 'https://google.com',
+        ]);
+
+        $this->assertEquals('https://google.com', $feed->getHomePageUrl());
+        $this->assertEquals('bar', $feed->getDescription());
+    }
 }

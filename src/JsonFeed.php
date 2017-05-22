@@ -2,6 +2,7 @@
 
 namespace Mateusjatenee\JsonFeed;
 
+use BadMethodCallException;
 use Illuminate\Support\Collection;
 use Mateusjatenee\JsonFeed\Exceptions\IncorrectFeedStructureException;
 
@@ -17,6 +18,8 @@ class JsonFeed
         'next_url', 'expired', 'favicon',
         'author', 'user_comment', 'hubs',
     ];
+
+    protected $version = 'https://jsonfeed.org/version/1';
 
     protected $properties;
 
@@ -63,5 +66,28 @@ class JsonFeed
         return $properties->filter(function ($value, $property) use ($array) {
             return in_array($property, $array);
         });
+    }
+
+    protected function getProperty($property)
+    {
+        if ($this->properties->has($property)) {
+            return $this->properties[$property];
+        }
+    }
+
+    public function getVersion()
+    {
+        return $this->version;
+    }
+
+    public function __call($method, $parameters)
+    {
+        if (substr($method, 0, 3) == 'get') {
+            return $this->getProperty(snake_case(substr($method, 3)));
+        }
+
+        $className = static::class;
+
+        throw new BadMethodCallException("Call to undefined method {$className}::{$method}()");
     }
 }
