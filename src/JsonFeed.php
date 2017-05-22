@@ -36,7 +36,7 @@ class JsonFeed
         return new static($properties);
     }
 
-    public function toArray()
+    public function build()
     {
         if (!$this->hasCorrectStructure()) {
             $filtered = $this->filterProperties($this->properties, $this->requiredProperties)->keys()->all();
@@ -46,7 +46,16 @@ class JsonFeed
             throw (new IncorrectFeedStructureException)->setProperties($missingProperties);
         }
 
-        return $this->filterProperties($this->properties)->all();
+        $properties = $this
+            ->filterProperties($this->properties)
+            ->put('items', $this->buildItems()->all());
+
+        return $properties;
+    }
+
+    public function toArray()
+    {
+        return $this->build()->toArray();
     }
 
     public function getAcceptedProperties()
@@ -89,5 +98,12 @@ class JsonFeed
         $className = static::class;
 
         throw new BadMethodCallException("Call to undefined method {$className}::{$method}()");
+    }
+
+    protected function buildItems()
+    {
+        return $this->items->map(function ($item) {
+            return $item;
+        });
     }
 }

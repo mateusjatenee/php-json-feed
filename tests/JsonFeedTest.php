@@ -26,7 +26,7 @@ class JsonFeedTest extends TestCase
             array_merge($properties, $arr = ['foo' => 'bar'])
         );
 
-        $this->assertEquals($properties, $feed->toArray());
+        $this->assertArraySubset($properties, $feed->toArray());
         $this->assertNotContains($arr, $feed->toArray());
     }
 
