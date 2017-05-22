@@ -1,6 +1,10 @@
 LaravelJsonFeed
 ================
 [![Build Status](https://travis-ci.org/mateusjatenee/laravel-json-feed.svg?branch=master)](https://travis-ci.org/mateusjatenee/laravel-json-feed)
+[![Latest Stable Version](https://poser.pugx.org/mateusjatenee/laravel-json-feed/v/stable)](https://packagist.org/packages/mateusjatenee/laravel-json-feed)
+[![Total Downloads](https://poser.pugx.org/mateusjatenee/laravel-json-feed/downloads)](https://packagist.org/packages/mateusjatenee/laravel-json-feed)
+[![Latest Unstable Version](https://poser.pugx.org/mateusjatenee/laravel-json-feed/v/unstable)](https://packagist.org/packages/mateusjatenee/laravel-json-feed)
+[![License](https://poser.pugx.org/mateusjatenee/laravel-json-feed/license)](https://packagist.org/packages/mateusjatenee/laravel-json-feed)
 
 ![bitmoji](https://render.bitstrips.com/v2/cpanel/10152648-280888328_2-s4-v1.png?transparent=1&palette=1&width=246)   
 
