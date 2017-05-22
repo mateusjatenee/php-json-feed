@@ -9,6 +9,159 @@ This library provides a way to generate [JSON feeds](https://jsonfeed.org), a fo
 $ composer require mateusjatenee/laravel-json-feed
 ```
 
+#### Usage   
+The library is really simple to use and actually does not depend on Laravel itself, though it allows you to use a config file (not yet). It automatically filters formats the JSON and removes any unnecessary property. 
+
+How to use it? Let's take the following JSON as an example:   
+```json   
+{
+	"title": "My JSON Feed test",
+	"home_page_url": "https://mguimaraes.co",
+	"feed_url": "https://mguimaraes.co/feeds/json",
+	"author": {
+		"url": "https://twitter.com/mateusjatenee",
+		"name": "Mateus Guimarães"
+	},
+	"icon": "https://mguimaraes.co/assets/img/icons/apple-touch-icon-72x72.png",
+	"favicon": "https://mguimaraes.co/assets/img/icons/favicon.ico",
+	"version": "https://jsonfeed.org/version/1",
+	"items": [
+		{
+			"content_text": "Great book. It's the best book.",
+			"date_published": "2017-05-22T00:00:00+00:00",
+			"title": "1984",
+			"author": {
+				"name": "Mateus",
+				"url": "https://mguimaraes.co"
+			},
+			"content_html": "<p>Great book. It's the best book.</p>",
+			"id": "abc123",
+			"url": "https://mguimaraes.co",
+			"external_url": "https://laravel.com",
+			"date_modified": "2017-05-22T00:00:00+00:00"
+		},
+		{
+			"content_text": "Great book. It's the best book.",
+			"date_published": "2017-05-22T00:00:00+00:00",
+			"title": "1984",
+			"author": {
+				"name": "Mateus",
+				"url": "https://mguimaraes.co"
+			},
+			"content_html": "<p>Great book. It's the best book.</p>",
+			"id": "abc123",
+			"url": "https://mguimaraes.co",
+			"external_url": "https://laravel.com",
+			"date_modified": "2017-05-22T00:00:00+00:00"
+		}
+	]
+}
+```  
+
+To do this, first you need to set the config — you can set it at any time during runtime (on a Service Provider, perhaps) using the Facade or instantiating it through the container (i.e `app('jsonFeed')`)
+
+```php   
+<?php
+
+use Mateusjatenee\JsonFeed\Facades\JsonFeed;
+
+$config = [
+            'title' => 'My JSON Feed test',
+            'home_page_url' => 'https://mguimaraes.co',
+            'feed_url' => 'https://mguimaraes.co/feeds/json',
+            'author' => [
+                'url' => 'https://twitter.com/mateusjatenee',
+                'name' => 'Mateus Guimarães',
+            ],
+            'icon' => 'https://mguimaraes.co/assets/img/icons/apple-touch-icon-72x72.png',
+            'favicon' => 'https://mguimaraes.co/assets/img/icons/favicon.ico',
+        ];
+
+JsonFeed::setConfig($config);
+
+```   
+
+Then, you need to set the items. The items may be an array of objects or a collection of objects. We're gonna talk about this a bit later.   
+
+```php   
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Controllers\Controller;
+use JsonFeed;
+
+class JsonFeedController extends Controller
+{
+	public function index()
+	{
+		$posts = App\Post::all();
+
+		return JsonFeed::setItems($posts)->toJson();
+	}
+}
+
+
+
+```
+
+Alternatively, you may do all at once.  
+
+```php   
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Controllers\Controller;
+use JsonFeed;
+
+class JsonFeedController extends Controller
+{
+	public function index()
+	{
+		$posts = App\Post::all();
+
+		$config = [
+            'title' => 'My JSON Feed test',
+            'home_page_url' => 'https://mguimaraes.co',
+            'feed_url' => 'https://mguimaraes.co/feeds/json',
+            'author' => [
+                'url' => 'https://twitter.com/mateusjatenee',
+                'name' => 'Mateus Guimarães',
+            ],
+            'icon' => 'https://mguimaraes.co/assets/img/icons/apple-touch-icon-72x72.png',
+            'favicon' => 'https://mguimaraes.co/assets/img/icons/favicon.ico',
+        ];
+
+		return JsonFeed::start($config, $posts)->toJson();
+	}
+}
+
+
+
+```
+
+#### How to get each item properties   
+It's really simple. An item only requires an `id`, the other fields are optional but highly recommended.  First of all, your model (or any other object that is gonna be used on the json feed) needs to implement `\Mateusjatenee\JsonFeed\Contracts\FeedItemContract` and it's only method - `getFeedId()`. It should return an unique Id relative to that item.  Below is a list of each method and what it does.  
+
+| Method                 | What it does                                                                                     | Expects |
+|------------------------|--------------------------------------------------------------------------------------------------|---------|
+| `getFeedId`            | Gets a unique ID                                                                                 | string  |
+| `getFeedUrl`           | Gets the URL of the resource                                                                     | string  |
+| `getFeedExternalUrl`   | Gets the URL of the page elsewhere                                                               | string  |
+| `getFeedTitle`         | Gets the resource title                                                                          | string  |
+| `getFeedContentHtml`   | Gets the HTML of the content                                                                     | string  |
+| `getFeedContentText`   | Gets the text of the content                                                                     | string  |
+| `getFeedSummary`       | Gets the resource summary                                                                        | string  |
+| `getFeedImage`         | Gets the resource image                                                                          | string  |
+| `getFeedBannerImage`   | Gets the resource banner image                                                                   | string  |
+| `getFeedDatePublished` | Gets the resource published date. The lib automatically converts it to the specific date format. | string  |
+| `getFeedDateModified`  | Gets the resource modified date. The lib automatically converts it to the specific date format.  | string  |
+| `getFeedAuthor`        | Gets the resource author. If not specified, the same as the top level one is going to be used.   | string  |
+| `getTags`              | Gets the resource tags.                                                                          | array   |  
+
+You may find all accepted methods on the [JSON Feed Spec](https://jsonfeed.org/version/1)
+
 #### Running tests
 ``` bash
 $ composer test
