@@ -16,8 +16,10 @@ class JsonFeedServiceProvider extends ServiceProvider
 
     public function register()
     {
-        $this->app->bind('jsonFeed', function ($app) {
-            return new JsonFeed;
+        $config = config('laravel-json-feed');
+
+        $this->app->singleton('jsonFeed', function ($app) use ($config) {
+            return new JsonFeed($config);
         });
     }
 }
