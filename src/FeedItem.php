@@ -32,15 +32,26 @@ class FeedItem
 
     public function build()
     {
+        return (new Collection($this->acceptedProperties))->flatMap(function ($property) {
+            $method = 'get' . camel_case($property);
+
+            return [
+                $property => $this->$method(),
+            ];
+        })->reject(function ($value, $property) {
+            return empty($value);
+        });
+
     }
 
     public function toArray()
     {
+        return $this->build()->toArray();
     }
 
     public function getProperty(string $property)
     {
-        $method = 'getFeed' . camel_case($property);
+        $method = 'getFeed' . studly_case($property);
 
         if (method_exists($this->object, $method)) {
             $value = $this->object->$method();
