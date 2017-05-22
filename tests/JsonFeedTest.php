@@ -102,7 +102,8 @@ class JsonFeedTest extends TestCase
             $config = $this->getJsonFeedConfig(), $items = $this->getArrayOfItems()
         );
 
-        $this->assertEquals($this->getExpectedJsonOutput($config, $items), $feed->toArray());
+        $this->assertEquals($expected = $this->getExpectedJsonOutput($config, $items), $feed->toArray());
+        $this->assertEquals($expected, json_decode($feed->toJson(), true));
     }
 
     protected function getJsonFeedConfig()

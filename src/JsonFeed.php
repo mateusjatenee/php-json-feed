@@ -96,6 +96,11 @@ class JsonFeed
         return $this->build()->toArray();
     }
 
+    public function toJson()
+    {
+        return json_encode($this->toArray());
+    }
+
     /**
      * Returns an array of accepted properties
      *
