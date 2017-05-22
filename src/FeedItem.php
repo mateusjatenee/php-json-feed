@@ -33,11 +33,9 @@ class FeedItem
     public function build()
     {
         return (new Collection($this->acceptedProperties))->flatMap(function ($property) {
-            $method = 'get' . camel_case($property);
+            $method = 'get' . studly_case($property);
 
-            return [
-                $property => $this->$method(),
-            ];
+            return [$property => $this->$method()];
         })->reject(function ($value, $property) {
             return empty($value);
         });
@@ -50,7 +48,9 @@ class FeedItem
 
     public function getProperty(string $property)
     {
-        $method = 'getFeed' . studly_case($property);
+        $method = 'getFeed' . $property;
+
+        $property = snake_case($property);
 
         if (method_exists($this->object, $method)) {
             $value = $this->object->$method();
@@ -71,7 +71,7 @@ class FeedItem
     public function __call($method, $parameters)
     {
         if (substr($method, 0, 3) == 'get') {
-            return $this->getProperty(snake_case(substr($method, 3)));
+            return $this->getProperty(substr($method, 3));
         }
 
         $className = static::class;
