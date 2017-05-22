@@ -36,7 +36,7 @@ class JsonFeed
     public function toArray()
     {
         if (!$this->hasCorrectStructure()) {
-            $filtered = $this->filterPropertiesies($this->properties, $this->requiredProperties)->keys()->all();
+            $filtered = $this->filterProperties($this->properties, $this->requiredProperties)->keys()->all();
 
             $missingProperties = array_diff($this->requiredProperties, $filtered);
 
