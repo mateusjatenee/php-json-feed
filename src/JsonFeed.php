@@ -39,15 +39,15 @@ class JsonFeed
     public function build()
     {
         if (!$this->hasCorrectStructure()) {
-            $filtered = $this->filterProperties($this->properties, $this->requiredProperties)->keys()->all();
-
-            $missingProperties = array_diff($this->requiredProperties, $filtered);
+            $missingProperties = array_diff(
+                $this->requiredProperties,
+                $this->filterProperties($this->requiredProperties)->keys()->all());
 
             throw (new IncorrectFeedStructureException)->setProperties($missingProperties);
         }
 
         $properties = $this
-            ->filterProperties($this->properties)
+            ->filterProperties()
             ->put('items', $this->buildItems()->all());
 
         return $properties;
@@ -65,14 +65,14 @@ class JsonFeed
 
     protected function hasCorrectStructure()
     {
-        return $this->filterProperties($this->properties, $this->requiredProperties)->count() === count($this->requiredProperties);
+        return $this->filterProperties($this->requiredProperties)->count() === count($this->requiredProperties);
     }
 
-    protected function filterProperties(Collection $properties, $array = null)
+    protected function filterProperties($array = null)
     {
         $array = $array ?? $this->acceptedProperties;
 
-        return $properties->filter(function ($value, $property) use ($array) {
+        return $this->properties->filter(function ($value, $property) use ($array) {
             return in_array($property, $array);
         });
     }
