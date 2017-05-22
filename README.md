@@ -2,6 +2,8 @@ LaravelJsonFeed
 ================
 [![Build Status](https://travis-ci.org/mateusjatenee/laravel-json-feed.svg?branch=master)](https://travis-ci.org/mateusjatenee/laravel-json-feed)
 
+![bitmoji](https://render.bitstrips.com/v2/cpanel/10152648-280888328_2-s4-v1.png?transparent=1&palette=1&width=246)   
+
 This library provides a way to generate [JSON feeds](https://jsonfeed.org), a format recently introduced to the community.
 
 #### Installation via Composer
