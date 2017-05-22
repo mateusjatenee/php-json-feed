@@ -2,6 +2,8 @@
 
 namespace Mateusjatenee\JsonFeed;
 
+use BadMethodCallException;
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
 class FeedItem
@@ -15,6 +17,8 @@ class FeedItem
         'content_html', 'summary', 'image', 'banner_image',
         'id', 'url', 'external_url', 'date_modified',
     ];
+
+    protected $dates = ['date_published', 'date_modified'];
 
     protected $object;
 
@@ -32,5 +36,36 @@ class FeedItem
 
     public function toArray()
     {
+    }
+
+    public function getProperty(string $property)
+    {
+        $method = 'getFeed' . camel_case($property);
+
+        if (method_exists($this->object, $method)) {
+            $value = $this->object->$method();
+
+            return in_array($property, $this->dates) ?
+            (new Carbon($value))->toRfc3339String() :
+            $value;
+        }
+    }
+
+    /**
+     * Handle dynamic methods calls
+     *
+     * @param $method
+     * @param $parameters
+     * @return mixed
+     */
+    public function __call($method, $parameters)
+    {
+        if (substr($method, 0, 3) == 'get') {
+            return $this->getProperty(snake_case(substr($method, 3)));
+        }
+
+        $className = static::class;
+
+        throw new BadMethodCallException("Call to undefined method {$className}::{$method}()");
     }
 }
