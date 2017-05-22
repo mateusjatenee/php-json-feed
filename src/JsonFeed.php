@@ -184,9 +184,7 @@ class JsonFeed
      */
     protected function getProperty($property)
     {
-        if ($this->properties->has($property)) {
-            return $this->properties[$property];
-        }
+        return $this->properties[$property] ?? null;
     }
 
     /**
