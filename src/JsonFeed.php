@@ -111,6 +111,12 @@ class JsonFeed
         return $this->acceptedProperties;
     }
 
+    /**
+     * Set the feed's items
+     *
+     * @param $items
+     * @return self
+     */
     public function setItems($items)
     {
         $this->items = $this->makeCollection($items);
@@ -118,11 +124,20 @@ class JsonFeed
         return $this;
     }
 
+    /**
+     * Gets the feed items
+     *
+     * @return \Illuminate\Support\Collection
+     */
     public function getItems()
     {
         return $this->items;
     }
 
+    /**
+     * @param $config
+     * @return self
+     */
     public function setConfig($config)
     {
         $this->properties = $this->makeCollection($config);
@@ -130,6 +145,11 @@ class JsonFeed
         return $this;
     }
 
+    /**
+     * Gets the Json Feed config
+     *
+     * @return \Illuminate\Support\Collection
+     */
     public function getConfig()
     {
         return $this->properties;
@@ -183,9 +203,23 @@ class JsonFeed
         return $this->version;
     }
 
+    /**
+     * @param $items
+     * @return mixed
+     */
     protected function makeCollection($items)
     {
         return $items instanceof Collection ? $items : new Collection($items);
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function buildItems()
+    {
+        return $this->items->map(function ($item) {
+            return (new FeedItem($item))->toArray();
+        });
     }
 
     /**
@@ -204,15 +238,5 @@ class JsonFeed
         $className = static::class;
 
         throw new BadMethodCallException("Call to undefined method {$className}::{$method}()");
-    }
-
-    /**
-     * @return mixed
-     */
-    protected function buildItems()
-    {
-        return $this->items->map(function ($item) {
-            return (new FeedItem($item))->toArray();
-        });
     }
 }

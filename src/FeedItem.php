@@ -8,28 +8,52 @@ use Illuminate\Support\Collection;
 
 class FeedItem
 {
+    /**
+     * @var array
+     */
     protected $requiredProperties = [
         'id',
     ];
 
+    /**
+     * @var array
+     */
     protected $acceptedProperties = [
         'content_text', 'date_published', 'title', 'author', 'tags',
         'content_html', 'summary', 'image', 'banner_image',
         'id', 'url', 'external_url', 'date_modified',
     ];
 
+    /**
+     * @var array
+     */
     protected $dates = ['date_published', 'date_modified'];
 
+    /**
+     * @var mixed
+     */
     protected $object;
 
+    /**
+     * @var mixed
+     */
     protected $attachments;
 
+    /**
+     * @param $object
+     * @param array $attachments
+     */
     public function __construct($object, array $attachments = [])
     {
         $this->object = $object;
         $this->attachments = new Collection($attachments);
     }
 
+    /**
+     * Builds the structure of the feed item
+     *
+     * @return \Illuminate\Support\Collection
+     */
     public function build()
     {
         return (new Collection($this->acceptedProperties))->flatMap(function ($property) {
@@ -41,11 +65,22 @@ class FeedItem
         });
     }
 
+    /**
+     * Converts the built item to an array
+     *
+     * @return array
+     */
     public function toArray()
     {
         return $this->build()->toArray();
     }
 
+    /**
+     * Gets a feed property if it exists
+     *
+     * @param string $property
+     * @return mixed
+     */
     public function getProperty(string $property)
     {
         $method = 'getFeed' . $property;
