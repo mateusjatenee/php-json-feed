@@ -10,7 +10,9 @@
         }
     ],
     "require": {
-        "php": ">=7.0"
+        "php": ">=7.0",
+        "illuminate/support": "^5.4",
+        "nesbot/carbon": "^1.22"
     },
     "autoload": {
         "psr-4": {
@@ -31,6 +33,7 @@
         "configure-commit-template": "git config --add commit.template .gitmessage"
     },
     "require-dev": {
+        "orchestra/testbench": "^3.4",
         "phpunit/phpunit": "^6.1"
     }
 }
