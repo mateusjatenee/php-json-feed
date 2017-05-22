@@ -20,9 +20,12 @@ class JsonFeed
 
     protected $properties;
 
-    public function __construct(array $properties = [])
+    protected $items;
+
+    public function __construct(array $properties = [], array $items = [])
     {
         $this->properties = new Collection($properties);
+        $this->items = new Collection($items);
     }
 
     public static function start($properties = [])
