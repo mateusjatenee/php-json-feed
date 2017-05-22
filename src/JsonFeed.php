@@ -4,8 +4,19 @@ namespace Mateusjatenee\JsonFeed;
 
 class JsonFeed
 {
-    public static function start()
+    protected $requiredProperties = [
+        'version', 'title',
+    ];
+
+    protected $properties;
+
+    public function __construct(array $properties = [])
     {
-        return new static;
+        $this->properties = $properties;
+    }
+
+    public static function start($properties = [])
+    {
+        return new static($properties);
     }
 }
