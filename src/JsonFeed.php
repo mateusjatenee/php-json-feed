@@ -3,6 +3,7 @@
 namespace Mateusjatenee\JsonFeed;
 
 use Illuminate\Support\Collection;
+use Mateusjatenee\JsonFeed\Exceptions\IncorrectFeedStructureException;
 
 class JsonFeed
 {
@@ -31,6 +32,14 @@ class JsonFeed
 
     public function toArray()
     {
+        if (!$this->hasCorrectStructure()) {
+            $filtered = $this->filterPropertiesies($this->properties, $this->requiredProperties)->keys()->all();
+
+            $missingProperties = array_diff($this->requiredProperties, $filtered);
+
+            throw (new IncorrectFeedStructureException)->setProperties($missingProperties);
+        }
+
         return $this->filterProperties($this->properties)->all();
     }
 
@@ -39,10 +48,17 @@ class JsonFeed
         return $this->acceptedProperties;
     }
 
-    protected function filterProperties(Collection $properties)
+    protected function hasCorrectStructure()
     {
-        return $properties->filter(function ($value, $property) {
-            return in_array($property, $this->acceptedProperties);
+        return $this->filterProperties($this->properties, $this->requiredProperties)->count() === count($this->requiredProperties);
+    }
+
+    protected function filterProperties(Collection $properties, $array = null)
+    {
+        $array = $array ?? $this->acceptedProperties;
+
+        return $properties->filter(function ($value, $property) use ($array) {
+            return in_array($property, $array);
         });
     }
 }

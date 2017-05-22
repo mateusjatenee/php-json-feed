@@ -1,5 +1,6 @@
 <?php
 
+use Mateusjatenee\JsonFeed\Exceptions\IncorrectFeedStructureException;
 use Mateusjatenee\JsonFeed\JsonFeed;
 use Mateusjatenee\JsonFeed\Tests\TestCase;
 
@@ -21,9 +22,38 @@ class JsonFeedTest extends TestCase
             ];
         })->all();
 
-        $feed = JsonFeed::start(array_merge($properties, $arr = ['foo' => 'bar']));
+        $feed = JsonFeed::start(
+            array_merge($properties, $arr = ['foo' => 'bar'])
+        );
 
         $this->assertEquals($properties, $feed->toArray());
         $this->assertNotContains($arr, $feed->toArray());
+    }
+
+    /** @test */
+    public function it_throws_an_exception_if_the_feed_does_not_contain_required_properties()
+    {
+        $properties = [
+            'description' => 'foo bar',
+        ];
+
+        $this->expectException(IncorrectFeedStructureException::class);
+        $this->expectExceptionMessage('The JSON Feed is missing the following properties: version, title');
+
+        JsonFeed::start($properties)->toArray();
+    }
+
+    /** @test */
+    public function it_throws_an_exception_if_the_feed_does_not_contain_at_least_one_required_property()
+    {
+        $properties = [
+            'version' => 'foo',
+            'description' => 'bar',
+        ];
+
+        $this->expectException(IncorrectFeedStructureException::class);
+        $this->expectExceptionMessage('The JSON Feed is missing the following properties: title');
+
+        JsonFeed::start($properties)->toArray();
     }
 }
