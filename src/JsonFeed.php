@@ -173,11 +173,7 @@ class JsonFeed
      */
     protected function filterProperties($array = null)
     {
-        $array = $array ?? $this->acceptedProperties;
-
-        return $this->properties->filter(function ($value, $property) use ($array) {
-            return in_array($property, $array);
-        });
+        return $this->properties->intersectByKeys(array_flip($array ?? $this->acceptedProperties));
     }
 
     /**
