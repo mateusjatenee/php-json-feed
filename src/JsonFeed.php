@@ -9,7 +9,7 @@ use Mateusjatenee\JsonFeed\Exceptions\IncorrectFeedStructureException;
 class JsonFeed
 {
     protected $requiredProperties = [
-        'version', 'title',
+        'title',
     ];
 
     protected $acceptedProperties = [
@@ -48,6 +48,7 @@ class JsonFeed
 
         $properties = $this
             ->filterProperties()
+            ->put('version', $this->getVersion())
             ->put('items', $this->buildItems()->all());
 
         return $properties;

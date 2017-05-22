@@ -22,6 +22,8 @@ class JsonFeedTest extends TestCase
             ];
         })->all();
 
+        $properties['version'] = app('jsonFeed')->getVersion();
+
         $feed = JsonFeed::start(
             array_merge($properties, $arr = ['foo' => 'bar'])
         );
@@ -38,7 +40,7 @@ class JsonFeedTest extends TestCase
         ];
 
         $this->expectException(IncorrectFeedStructureException::class);
-        $this->expectExceptionMessage('The JSON Feed is missing the following properties: version, title');
+        $this->expectExceptionMessage('The JSON Feed is missing the following properties: title');
 
         JsonFeed::start($properties)->toArray();
     }
