@@ -1,7 +1,9 @@
 <?php
 
+use Illuminate\Support\Collection;
 use Mateusjatenee\JsonFeed\Exceptions\IncorrectFeedStructureException;
 use Mateusjatenee\JsonFeed\JsonFeed;
+use Mateusjatenee\JsonFeed\Tests\Fakes\DummyFeedItem;
 use Mateusjatenee\JsonFeed\Tests\TestCase;
 
 class JsonFeedTest extends TestCase
@@ -75,5 +77,21 @@ class JsonFeedTest extends TestCase
 
         $this->assertEquals('https://google.com', $feed->getHomePageUrl());
         $this->assertEquals('bar', $feed->getDescription());
+    }
+
+    /** @test */
+    public function it_automatically_converts_an_array_to_a_collection()
+    {
+        $feed = JsonFeed::start([], [new DummyFeedItem]);
+        $this->assertInstanceOf(Collection::class, $feed->getItems());
+    }
+
+    /** @test */
+    public function it_does_not_add_a_collection_inside_another_collection()
+    {
+        $feed = JsonFeed::start([], collect([new DummyFeedItem]));
+
+        $this->assertInstanceOf(Collection::class, $feed->getItems());
+        $this->assertInstanceOf(DummyFeedItem::class, $feed->getItems()->first());
     }
 }

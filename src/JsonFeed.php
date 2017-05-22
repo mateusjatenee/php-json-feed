@@ -44,10 +44,10 @@ class JsonFeed
      * @param array $properties
      * @param array $items
      */
-    public function __construct(array $properties = [], array $items = [])
+    public function __construct(array $properties = [], $items = [])
     {
         $this->properties = new Collection($properties);
-        $this->items = new Collection($items);
+        $this->items = $items instanceof Collection ? $items : new Collection($items);
     }
 
     /**
@@ -56,9 +56,9 @@ class JsonFeed
      * @param array $properties
      * @return self
      */
-    public static function start($properties = [])
+    public static function start($properties = [], $items = [])
     {
-        return new static($properties);
+        return new static($properties, $items);
     }
 
     /**
@@ -103,6 +103,11 @@ class JsonFeed
     public function getAcceptedProperties()
     {
         return $this->acceptedProperties;
+    }
+
+    public function getItems()
+    {
+        return $this->items;
     }
 
     /**

@@ -41,7 +41,6 @@ class FeedItem
         })->reject(function ($value, $property) {
             return empty($value);
         });
-
     }
 
     public function toArray()
