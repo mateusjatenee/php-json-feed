@@ -3,8 +3,9 @@
 namespace Mateusjatenee\JsonFeed\Tests\Fakes;
 
 use Carbon\Carbon;
+use Mateusjatenee\JsonFeed\Contracts\FeedItemContract;
 
-class DummyFeedItem
+class DummyFeedItem implements FeedItemContract
 {
     protected $url = 'https://mguimaraes.co';
 
