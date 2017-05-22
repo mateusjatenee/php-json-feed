@@ -94,4 +94,60 @@ class JsonFeedTest extends TestCase
         $this->assertInstanceOf(Collection::class, $feed->getItems());
         $this->assertInstanceOf(DummyFeedItem::class, $feed->getItems()->first());
     }
+
+    /** @test */
+    public function it_builds_a_complete_json_feed()
+    {
+        $feed = JsonFeed::start(
+            $config = $this->getJsonFeedConfig(), $items = $this->getArrayOfItems()
+        );
+
+        $this->assertEquals($this->getExpectedJsonOutput($config, $items), $feed->toArray());
+    }
+
+    protected function getJsonFeedConfig()
+    {
+        return [
+            'title' => 'My JSON Feed test',
+            'home_page_url' => 'https://mguimaraes.co',
+            'should_not_appear' => 'foobar',
+            'feed_url' => 'https://mguimaraes.co/feeds/json',
+            'author' => [
+                'url' => 'https://twitter.com/mateusjatenee',
+                'name' => 'Mateus Guimarães',
+            ],
+            'icon' => 'https://mguimaraes.co/assets/img/icons/apple-touch-icon-72x72.png',
+            'favicon' => 'https://mguimaraes.co/assets/img/icons/favicon.ico',
+        ];
+    }
+
+    protected function getArrayOfItems()
+    {
+        return [
+            new DummyFeedItem, new DummyFeedItem,
+        ];
+    }
+
+    protected function getExpectedJsonOutput($config, $items)
+    {
+        $config = collect($config)->filter(function ($val, $key) {
+            return in_array($key, app('jsonFeed')->getAcceptedProperties());
+        });
+
+        $items = array_map(function ($item) {
+            return [
+                'title' => $item->getFeedTitle(),
+                'date_published' => $item->getFeedDatePublished()->toRfc3339String(),
+                'date_modified' => $item->getFeedDateModified()->toRfc3339String(),
+                'id' => $item->getFeedId(),
+                'url' => $item->getFeedUrl(),
+                'external_url' => $item->getFeedExternalUrl(),
+                'author' => $item->getFeedAuthor(),
+                'content_html' => $item->getFeedContentHtml(),
+                'content_text' => $item->getFeedContentText(),
+            ];
+        }, $items);
+
+        return $config->put('version', app('jsonFeed')->getVersion())->put('items', $items)->toArray();
+    }
 }

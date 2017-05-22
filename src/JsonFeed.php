@@ -5,6 +5,7 @@ namespace Mateusjatenee\JsonFeed;
 use BadMethodCallException;
 use Illuminate\Support\Collection;
 use Mateusjatenee\JsonFeed\Exceptions\IncorrectFeedStructureException;
+use Mateusjatenee\JsonFeed\FeedItem;
 
 class JsonFeed
 {
@@ -182,7 +183,7 @@ class JsonFeed
     protected function buildItems()
     {
         return $this->items->map(function ($item) {
-            return $item;
+            return (new FeedItem($item))->toArray();
         });
     }
 }
