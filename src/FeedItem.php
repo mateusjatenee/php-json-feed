@@ -4,7 +4,7 @@ namespace Mateusjatenee\JsonFeed;
 
 use Illuminate\Support\Collection;
 
-class JsonFeed
+class FeedItem
 {
     protected $requiredProperties = [
         'id',
