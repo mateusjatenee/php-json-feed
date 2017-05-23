@@ -73,16 +73,14 @@ class JsonFeed
         if (!$this->hasCorrectStructure()) {
             $missingProperties = array_diff(
                 $this->requiredProperties,
-                $this->filterProperties($this->requiredProperties)->keys()->all()
+                array_keys($this->filterProperties($this->requiredProperties))
             );
 
             throw (new IncorrectFeedStructureException)->setProperties($missingProperties);
         }
 
         return $this
-            ->filterProperties()
-            ->put('version', $this->getVersion())
-            ->put('items', $this->buildItems()->all());
+            ->filterProperties() + ['version' => $this->getVersion(), 'items' => $this->buildItems()];
     }
 
     /**
@@ -92,12 +90,12 @@ class JsonFeed
      */
     public function toArray()
     {
-        return $this->build()->toArray();
+        return $this->build();
     }
 
     public function toJson()
     {
-        return $this->build()->toJson();
+        return json_encode($this->build());
     }
 
     /**
@@ -118,7 +116,7 @@ class JsonFeed
      */
     public function setItems($items)
     {
-        $this->items = $this->makeCollection($items);
+        $this->items = $this->makeArray($items);
 
         return $this;
     }
@@ -139,7 +137,7 @@ class JsonFeed
      */
     public function setConfig($config)
     {
-        $this->properties = $this->makeCollection($config);
+        $this->properties = $this->makeArray($config);
 
         return $this;
     }
@@ -161,7 +159,7 @@ class JsonFeed
      */
     protected function hasCorrectStructure()
     {
-        return $this->filterProperties($this->requiredProperties)->count() === count($this->requiredProperties);
+        return count($this->filterProperties($this->requiredProperties)) === count($this->requiredProperties);
     }
 
     /**
@@ -172,7 +170,7 @@ class JsonFeed
      */
     protected function filterProperties($array = null)
     {
-        return $this->properties->intersectByKeys(array_flip($array ?? $this->acceptedProperties));
+        return array_intersect_key($this->properties, array_flip($array ?? $this->acceptedProperties));
     }
 
     /**
@@ -183,7 +181,7 @@ class JsonFeed
      */
     protected function getProperty($property)
     {
-        return $this->properties->get($property);
+        return $this->properties[$property] ?? null;
     }
 
     /**
@@ -210,9 +208,9 @@ class JsonFeed
      */
     protected function buildItems()
     {
-        return $this->items->map(function ($item) {
+        return array_map(function ($item) {
             return FeedItem::setItem($item)->toArray();
-        });
+        }, $this->items);
     }
 
     /**

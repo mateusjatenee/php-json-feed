@@ -93,8 +93,7 @@ class JsonFeedTest extends TestCase
     {
         $feed = JsonFeed::start([], collect([new DummyFeedItem]));
 
-        $this->assertInstanceOf(Collection::class, $feed->getItems());
-        $this->assertInstanceOf(DummyFeedItem::class, $feed->getItems()->first());
+        $this->assertInstanceOf(DummyFeedItem::class, $feed->getItems()[0]);
     }
 
     /** @test */
@@ -102,7 +101,7 @@ class JsonFeedTest extends TestCase
     {
         $feed = app('jsonFeed')->setConfig($config = $this->getJsonFeedConfig());
 
-        $this->assertEquals(count($config), $feed->getConfig()->count());
+        $this->assertEquals(count($config), count($feed->getConfig()));
     }
 
     /** @test */
@@ -110,7 +109,7 @@ class JsonFeedTest extends TestCase
     {
         $feed = app('jsonFeed')->setItems($items = $this->getArrayOfItems());
 
-        $this->assertEquals(count($items), $feed->getItems()->count());
+        $this->assertEquals(count($items), count($feed->getItems()));
     }
 
     /** @test */
