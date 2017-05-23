@@ -1,4 +1,4 @@
-LaravelJsonFeed
+PHP Json Feed
 ================
 [![Build Status](https://travis-ci.org/mateusjatenee/laravel-json-feed.svg?branch=master)](https://travis-ci.org/mateusjatenee/laravel-json-feed)
 [![Latest Stable Version](https://poser.pugx.org/mateusjatenee/laravel-json-feed/v/stable)](https://packagist.org/packages/mateusjatenee/laravel-json-feed)
@@ -33,7 +33,9 @@ And on the `aliases` array, register the facade:
 ```
 
 #### Usage   
-The library is really simple to use and actually does not depend on Laravel itself, though it allows you to use a config file (not yet). It automatically filters formats the JSON and removes any unnecessary property. 
+The library is really simple to use and actually does not depend on Laravel itself, though it allows you to use a config file (not yet). It automatically filters formats the JSON and removes any unnecessary property.   
+
+If you're not using Laravel, [jump to this part](#all-at-once).
 
 How to use it? Let's take the following JSON as an example:   
 ```json   
@@ -126,7 +128,8 @@ class JsonFeedController extends Controller
 
 ```
 
-Alternatively, you may do all at once.  
+# All at once
+Alternatively, you may do all at once, specially if you are not using Laravel.  
 
 ```php   
 <?php
