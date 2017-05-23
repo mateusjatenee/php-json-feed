@@ -4,10 +4,12 @@ namespace Mateusjatenee\JsonFeed;
 
 use BadMethodCallException;
 use Carbon\Carbon;
-use Illuminate\Support\Collection;
+use Mateusjatenee\JsonFeed\Traits\ArrayHelpers;
 
 class FeedItem
 {
+    use ArrayHelpers;
+
     /**
      * @var array
      */
@@ -46,23 +48,25 @@ class FeedItem
     public function __construct($object, array $attachments = [])
     {
         $this->object = $object;
-        $this->attachments = new Collection($attachments);
+        $this->attachments = $this->makeArray($attachments);
     }
 
     /**
      * Builds the structure of the feed item
      *
-     * @return \Illuminate\Support\Collection
+     * @return array
      */
     public function build()
     {
-        return (new Collection($this->acceptedProperties))->flatMap(function ($property) {
-            $method = 'get' . studly_case($property);
+        return array_filter(
+            $this->collapse(array_map(function ($property) {
+                $method = 'get' . studly_case($property);
 
-            return [$property => $this->$method()];
-        })->reject(function ($value, $property) {
-            return empty($value);
-        });
+                return [
+                    $property => $this->$method(),
+                ];
+            }, $this->acceptedProperties))
+        );
     }
 
     /**
@@ -72,7 +76,7 @@ class FeedItem
      */
     public function toArray()
     {
-        return $this->build()->toArray();
+        return $this->build();
     }
 
     /**

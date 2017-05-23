@@ -6,9 +6,12 @@ use BadMethodCallException;
 use Illuminate\Support\Collection;
 use Mateusjatenee\JsonFeed\Exceptions\IncorrectFeedStructureException;
 use Mateusjatenee\JsonFeed\FeedItem;
+use Mateusjatenee\JsonFeed\Traits\ArrayHelpers;
 
 class JsonFeed
 {
+    use ArrayHelpers;
+
     /**
      * @var array
      */
@@ -192,15 +195,6 @@ class JsonFeed
     public function getVersion()
     {
         return $this->version;
-    }
-
-    /**
-     * @param $items
-     * @return mixed
-     */
-    protected function makeArray($items)
-    {
-        return $items instanceof Collection ? $items->toArray() : $items;
     }
 
     /**
