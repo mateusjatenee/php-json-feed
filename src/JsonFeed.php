@@ -47,8 +47,8 @@ class JsonFeed
      */
     public function __construct($properties = [], $items = [])
     {
-        $this->properties = $this->makeCollection($properties);
-        $this->items = $this->makeCollection($items);
+        $this->properties = $this->makeArray($properties);
+        $this->items = $this->makeArray($items);
     }
 
     /**
@@ -200,9 +200,9 @@ class JsonFeed
      * @param $items
      * @return mixed
      */
-    protected function makeCollection($items)
+    protected function makeArray($items)
     {
-        return $items instanceof Collection ? $items : new Collection($items);
+        return $items instanceof Collection ? $items->toArray() : $items;
     }
 
     /**
