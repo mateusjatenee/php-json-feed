@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Facade;
 
 class JsonFeed extends Facade
 {
-    protected function getFacadeAcessor()
+    protected static function getFacadeAccessor()
     {
         return 'jsonFeed';
     }
