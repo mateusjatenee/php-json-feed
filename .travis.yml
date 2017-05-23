@@ -1,5 +1,7 @@
 language: php
 
+sudo: false
+
 git:
   depth: 2
 
