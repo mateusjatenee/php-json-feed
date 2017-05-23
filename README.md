@@ -27,8 +27,8 @@ On your `config/app.php` file, register the service provider:
 And on the `aliases` array, register the facade:   
 ```php   
 'aliases' => [
-		...
-		'JsonFeed' => Mateusjatenee\JsonFeed\Facades\JsonFeed::class,
+    ...
+    'JsonFeed' => Mateusjatenee\JsonFeed\Facades\JsonFeed::class,
 ];
 ```
 
@@ -38,46 +38,46 @@ The library is really simple to use and actually does not depend on Laravel itse
 How to use it? Let's take the following JSON as an example:   
 ```json   
 {
-	"title": "My JSON Feed test",
-	"home_page_url": "https://mguimaraes.co",
-	"feed_url": "https://mguimaraes.co/feeds/json",
-	"author": {
-		"url": "https://twitter.com/mateusjatenee",
-		"name": "Mateus Guimarães"
-	},
-	"icon": "https://mguimaraes.co/assets/img/icons/apple-touch-icon-72x72.png",
-	"favicon": "https://mguimaraes.co/assets/img/icons/favicon.ico",
-	"version": "https://jsonfeed.org/version/1",
-	"items": [
-		{
-			"content_text": "Great book. It's the best book.",
-			"date_published": "2017-05-22T00:00:00+00:00",
-			"title": "1984",
-			"author": {
-				"name": "Mateus",
-				"url": "https://mguimaraes.co"
-			},
-			"content_html": "<p>Great book. It's the best book.</p>",
-			"id": "abc123",
-			"url": "https://mguimaraes.co",
-			"external_url": "https://laravel.com",
-			"date_modified": "2017-05-22T00:00:00+00:00"
-		},
-		{
-			"content_text": "Great book. It's the best book.",
-			"date_published": "2017-05-22T00:00:00+00:00",
-			"title": "1984",
-			"author": {
-				"name": "Mateus",
-				"url": "https://mguimaraes.co"
-			},
-			"content_html": "<p>Great book. It's the best book.</p>",
-			"id": "abc123",
-			"url": "https://mguimaraes.co",
-			"external_url": "https://laravel.com",
-			"date_modified": "2017-05-22T00:00:00+00:00"
-		}
-	]
+    "title": "My JSON Feed test",
+    "home_page_url": "https://mguimaraes.co",
+    "feed_url": "https://mguimaraes.co/feeds/json",
+    "author": {
+        "url": "https://twitter.com/mateusjatenee",
+        "name": "Mateus Guimarães"
+    },
+    "icon": "https://mguimaraes.co/assets/img/icons/apple-touch-icon-72x72.png",
+    "favicon": "https://mguimaraes.co/assets/img/icons/favicon.ico",
+    "version": "https://jsonfeed.org/version/1",
+    "items": [
+        {
+            "content_text": "Great book. It's the best book.",
+            "date_published": "2017-05-22T00:00:00+00:00",
+            "title": "1984",
+            "author": {
+                "name": "Mateus",
+                "url": "https://mguimaraes.co"
+            },
+            "content_html": "<p>Great book. It's the best book.</p>",
+            "id": "abc123",
+            "url": "https://mguimaraes.co",
+            "external_url": "https://laravel.com",
+            "date_modified": "2017-05-22T00:00:00+00:00"
+        },
+        {
+            "content_text": "Great book. It's the best book.",
+            "date_published": "2017-05-22T00:00:00+00:00",
+            "title": "1984",
+            "author": {
+                "name": "Mateus",
+                "url": "https://mguimaraes.co"
+            },
+            "content_html": "<p>Great book. It's the best book.</p>",
+            "id": "abc123",
+            "url": "https://mguimaraes.co",
+            "external_url": "https://laravel.com",
+            "date_modified": "2017-05-22T00:00:00+00:00"
+        }
+    ]
 }
 ```  
 
@@ -89,16 +89,16 @@ To do this, first you need to set the config — you can set it at any time duri
 use Mateusjatenee\JsonFeed\Facades\JsonFeed;
 
 $config = [
-            'title' => 'My JSON Feed test',
-            'home_page_url' => 'https://mguimaraes.co',
-            'feed_url' => 'https://mguimaraes.co/feeds/json',
-            'author' => [
-                'url' => 'https://twitter.com/mateusjatenee',
-                'name' => 'Mateus Guimarães',
-            ],
-            'icon' => 'https://mguimaraes.co/assets/img/icons/apple-touch-icon-72x72.png',
-            'favicon' => 'https://mguimaraes.co/assets/img/icons/favicon.ico',
-        ];
+    'title' => 'My JSON Feed test',
+    'home_page_url' => 'https://mguimaraes.co',
+    'feed_url' => 'https://mguimaraes.co/feeds/json',
+    'author' => [
+        'url' => 'https://twitter.com/mateusjatenee',
+        'name' => 'Mateus Guimarães',
+    ],
+    'icon' => 'https://mguimaraes.co/assets/img/icons/apple-touch-icon-72x72.png',
+    'favicon' => 'https://mguimaraes.co/assets/img/icons/favicon.ico',
+];
 
 JsonFeed::setConfig($config);
 
@@ -116,15 +116,13 @@ use JsonFeed;
 
 class JsonFeedController extends Controller
 {
-	public function index()
-	{
-		$posts = App\Post::all();
+    public function index()
+    {
+        $posts = App\Post::all();
 
-		return JsonFeed::setItems($posts)->toJson();
-	}
+        return JsonFeed::setItems($posts)->toJson();
+    }
 }
-
-
 
 ```
 
@@ -140,11 +138,11 @@ use JsonFeed;
 
 class JsonFeedController extends Controller
 {
-	public function index()
-	{
-		$posts = App\Post::all();
+    public function index()
+    {
+        $posts = App\Post::all();
 
-		$config = [
+        $config = [
             'title' => 'My JSON Feed test',
             'home_page_url' => 'https://mguimaraes.co',
             'feed_url' => 'https://mguimaraes.co/feeds/json',
@@ -156,11 +154,9 @@ class JsonFeedController extends Controller
             'favicon' => 'https://mguimaraes.co/assets/img/icons/favicon.ico',
         ];
 
-		return JsonFeed::start($config, $posts)->toJson();
-	}
+        return JsonFeed::start($config, $posts)->toJson();
+    }
 }
-
-
 
 ```
 
