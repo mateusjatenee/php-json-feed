@@ -12,7 +12,7 @@ trait ArrayHelpers
      */
     protected function makeArray($items)
     {
-        return $items instanceof Collection ? $items->toArray() : $items;
+        return $items instanceof Collection ? $items->all() : $items;
     }
 
     /**

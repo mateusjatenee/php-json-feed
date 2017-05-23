@@ -78,6 +78,7 @@ class FeedItem
      */
     public function toArray()
     {
+
         return $this->build();
     }
 

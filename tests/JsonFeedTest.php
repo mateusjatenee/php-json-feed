@@ -3,6 +3,7 @@
 use Illuminate\Support\Collection;
 use Mateusjatenee\JsonFeed\Exceptions\IncorrectFeedStructureException;
 use Mateusjatenee\JsonFeed\JsonFeed;
+use Mateusjatenee\JsonFeed\Tests\Fakes\DummyArrayableFeedItem;
 use Mateusjatenee\JsonFeed\Tests\Fakes\DummyFeedItem;
 use Mateusjatenee\JsonFeed\Tests\TestCase;
 
@@ -123,6 +124,17 @@ class JsonFeedTest extends TestCase
         $this->assertEquals($expected, json_decode($feed->toJson(), true));
     }
 
+    /** @test */
+    public function it_builds_a_complete_json_feed_from_an_arrayable_collection()
+    {
+        $feed = JsonFeed::start(
+            $config = $this->getJsonFeedConfig(), $items = collect($this->getArrayOfItems(true))
+        );
+
+        $this->assertEquals($expected = $this->getExpectedJsonOutput($config, $items), $feed->toArray());
+        $this->assertEquals($expected, json_decode($feed->toJson(), true));
+    }
+
     protected function getJsonFeedConfig()
     {
         return [
@@ -139,18 +151,18 @@ class JsonFeedTest extends TestCase
         ];
     }
 
-    protected function getArrayOfItems()
+    protected function getArrayOfItems($arrayable = false)
     {
+        $model = $arrayable ? DummyArrayableFeedItem::class : DummyFeedItem::class;
+
         return [
-            new DummyFeedItem, new DummyFeedItem,
+            new $model, new $model,
         ];
     }
 
     protected function getExpectedJsonOutput($config, $items)
     {
-        $config = collect($config)->filter(function ($val, $key) {
-            return in_array($key, app('jsonFeed')->getAcceptedProperties());
-        });
+        $config = array_intersect_key($config, array_flip(app('jsonFeed')->getAcceptedProperties()));
 
         $items = array_map(function ($item) {
             return [
@@ -164,8 +176,8 @@ class JsonFeedTest extends TestCase
                 'content_html' => $item->getFeedContentHtml(),
                 'content_text' => $item->getFeedContentText(),
             ];
-        }, $items);
+        }, $items instanceof Collection ? $items->all() : $items);
 
-        return $config->put('version', app('jsonFeed')->getVersion())->put('items', $items)->toArray();
+        return $config + ['version' => app('jsonFeed')->getVersion(), 'items' => $items];
     }
 }
