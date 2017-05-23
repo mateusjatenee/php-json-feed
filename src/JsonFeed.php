@@ -211,7 +211,7 @@ class JsonFeed
     protected function buildItems()
     {
         return $this->items->map(function ($item) {
-            return (new FeedItem($item))->toArray();
+            return FeedItem::setItem($item)->toArray();
         });
     }
 

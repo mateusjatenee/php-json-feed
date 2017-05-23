@@ -97,6 +97,18 @@ class FeedItem
     }
 
     /**
+     * Initializes a new instance of FeedItem with the given item.
+     *
+     * @param array $item
+     * @param array $attachments
+     * @return static
+     */
+    public static function setItem($item = [], $attachments = [])
+    {
+        return new static($item, $attachments = []);
+    }
+
+    /**
      * Handle dynamic methods calls
      *
      * @param $method
