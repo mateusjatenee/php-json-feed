@@ -73,17 +73,16 @@ class JsonFeed
         if (!$this->hasCorrectStructure()) {
             $missingProperties = array_diff(
                 $this->requiredProperties,
-                $this->filterProperties($this->requiredProperties)->keys()->all());
+                $this->filterProperties($this->requiredProperties)->keys()->all()
+            );
 
             throw (new IncorrectFeedStructureException)->setProperties($missingProperties);
         }
 
-        $properties = $this
+        return $this
             ->filterProperties()
             ->put('version', $this->getVersion())
             ->put('items', $this->buildItems()->all());
-
-        return $properties;
     }
 
     /**
@@ -98,7 +97,7 @@ class JsonFeed
 
     public function toJson()
     {
-        return json_encode($this->toArray());
+        return $this->build()->toJson();
     }
 
     /**
