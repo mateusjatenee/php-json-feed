@@ -12,6 +12,6 @@ class JsonFeedTest extends TestCase
     /** @test */
     public function it_returns_an_instance_of_json_feed()
     {
-        $this->assertInstanceOf(JsonFeed::class, JsonFeedFacade::start());
+        $this->assertInstanceOf(JsonFeed::class, JsonFeedFacade::getFacadeRoot());
     }
 }
