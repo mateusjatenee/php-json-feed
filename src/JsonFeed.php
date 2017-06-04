@@ -74,12 +74,7 @@ class JsonFeed
     public function build()
     {
         if (!$this->hasCorrectStructure()) {
-            $missingProperties = array_diff(
-                $this->requiredProperties,
-                array_keys($this->filterProperties($this->requiredProperties))
-            );
-
-            throw (new IncorrectFeedStructureException)->setProperties($missingProperties);
+            throw (new IncorrectFeedStructureException)->setProperties($this->getMissingProperties());
         }
 
         return $this
@@ -205,6 +200,19 @@ class JsonFeed
         return array_map(function ($item) {
             return FeedItem::setItem($item)->toArray();
         }, $this->items);
+    }
+
+    /**
+     * Gets the missing properties in case the JSON feed is not avlid
+     *
+     * @return array the missing required properties
+     */
+    protected function getMissingProperties()
+    {
+        return array_diff(
+            $this->requiredProperties,
+            array_keys($this->filterProperties($this->requiredProperties))
+        );
     }
 
     /**
