@@ -35,5 +35,15 @@
         "orchestra/testbench": "~3.2",
         "phpunit/phpunit": "^6.1",
         "illuminate/support": "~5.2"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Mateusjatenee\\JsonFeed\\JsonFeedServiceProvider"
+            ],
+            "aliases": {
+                "Cart": "Mateusjatenee\\JsonFeed\\Facades\\JsonFeed"
+            }
+        }
     }
 }
