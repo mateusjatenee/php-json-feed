@@ -2,7 +2,6 @@
 
 namespace Mateusjatenee\JsonFeed;
 
-use Carbon\Carbon;
 use Mateusjatenee\JsonFeed\Traits\ArrayHelpers;
 use Mateusjatenee\JsonFeed\Traits\ItemGetters;
 
@@ -60,7 +59,8 @@ class FeedItem
     {
         return array_filter(
             $this->flatMap($this->acceptedProperties, function ($property) {
-                $method = 'get' . studly_case($property);
+
+                $method = $this->getMethodForProperty($property);
 
                 return [$property => $this->$method()];
             })
@@ -75,27 +75,6 @@ class FeedItem
     public function toArray()
     {
         return $this->build();
-    }
-
-    /**
-     * Gets a feed property if it exists
-     *
-     * @param string $property
-     * @return mixed
-     */
-    public function getProperty(string $property)
-    {
-        $method = 'getFeed' . $property;
-
-        $property = snake_case($property);
-
-        if (method_exists($this->object, $method)) {
-            $value = $this->object->$method();
-
-            return in_array($property, $this->dates) ?
-            (new Carbon($value))->toRfc3339String() :
-            $value;
-        }
     }
 
     /**

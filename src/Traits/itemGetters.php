@@ -4,6 +4,25 @@ namespace Mateusjatenee\JsonFeed\Traits;
 
 trait ItemGetters
 {
+    public function getMethodsMap()
+    {
+        return [
+            'id' => 'getId',
+            'title' => 'getTitle',
+            'author' => 'getAuthor',
+            'tags' => 'getTags',
+            'date_published' => 'getDatePublished',
+            'date_modified' => 'getDateModified',
+            'content_html' => 'getContentHtml',
+            'content_text' => 'getContentText',
+            'summary' => 'getSummary',
+            'image' => 'getImage',
+            'banner_image' => 'getBannerImage',
+            'url' => 'getUrl',
+            'external_url' => 'getExternalUrl',
+        ];
+    }
+
     public function getDatePublished()
     {
         return method_exists($this->object, 'getFeedDatePublished') ? $this->object->getFeedDatePublished()->toRfc3339String() : null;
@@ -67,6 +86,11 @@ trait ItemGetters
     public function getDateModified()
     {
         return method_exists($this->object, 'getFeedDateModified') ? $this->object->getFeedDateModified()->toRfc3339String() : null;
+    }
+
+    public function getMethodForProperty($method)
+    {
+        return $this->getMethodsMap()[$method] ?? null;
     }
 
     public function call($method)
