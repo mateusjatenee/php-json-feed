@@ -97,16 +97,6 @@ class JsonFeed
     }
 
     /**
-     * Returns an array of accepted properties
-     *
-     * @return array
-     */
-    public function getAcceptedProperties()
-    {
-        return $this->acceptedProperties;
-    }
-
-    /**
      * Set the feed's items
      *
      * @param $items
@@ -115,6 +105,17 @@ class JsonFeed
     public function setItems($items)
     {
         $this->items = $this->makeArray($items);
+
+        return $this;
+    }
+
+    /**
+     * @param $config
+     * @return self
+     */
+    public function setConfig($config)
+    {
+        $this->properties = $this->makeArray($config);
 
         return $this;
     }
@@ -130,17 +131,6 @@ class JsonFeed
     }
 
     /**
-     * @param $config
-     * @return self
-     */
-    public function setConfig($config)
-    {
-        $this->properties = $this->makeArray($config);
-
-        return $this;
-    }
-
-    /**
      * Gets the Json Feed config
      *
      * @return \Illuminate\Support\Collection
@@ -151,24 +141,13 @@ class JsonFeed
     }
 
     /**
-     * Checks if the properties includes the required ones
+     * Returns an array of accepted properties
      *
-     * @return boolean
+     * @return array
      */
-    protected function hasCorrectStructure()
+    public function getAcceptedProperties()
     {
-        return count($this->filterProperties($this->requiredProperties)) === count($this->requiredProperties);
-    }
-
-    /**
-     * Filter properties collection to only include accepted properties
-     *
-     * @param $array
-     * @return mixed
-     */
-    protected function filterProperties($array = null)
-    {
-        return array_intersect_key($this->properties, array_flip($array ?? $this->acceptedProperties));
+        return $this->acceptedProperties;
     }
 
     /**
@@ -193,16 +172,6 @@ class JsonFeed
     }
 
     /**
-     * @return mixed
-     */
-    protected function buildItems()
-    {
-        return array_map(function ($item) {
-            return FeedItem::setItem($item)->toArray();
-        }, $this->items);
-    }
-
-    /**
      * Gets the missing properties in case the JSON feed is not avlid
      *
      * @return array the missing required properties
@@ -213,6 +182,37 @@ class JsonFeed
             $this->requiredProperties,
             array_keys($this->filterProperties($this->requiredProperties))
         );
+    }
+
+    /**
+     * Checks if the properties includes the required ones
+     *
+     * @return boolean
+     */
+    protected function hasCorrectStructure()
+    {
+        return count($this->filterProperties($this->requiredProperties)) === count($this->requiredProperties);
+    }
+
+    /**
+     * Filter properties collection to only include accepted properties
+     *
+     * @param $array
+     * @return mixed
+     */
+    protected function filterProperties($array = null)
+    {
+        return array_intersect_key($this->properties, array_flip($array ?? $this->acceptedProperties));
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function buildItems()
+    {
+        return array_map(function ($item) {
+            return FeedItem::setItem($item)->toArray();
+        }, $this->items);
     }
 
     /**
