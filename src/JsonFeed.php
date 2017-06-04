@@ -58,7 +58,7 @@ class JsonFeed
      * Returns an instance of the class
      *
      * @param array $properties
-     * @return self
+     * @return static
      */
     public static function start($properties = [], $items = [])
     {
