@@ -2,13 +2,13 @@
 
 namespace Mateusjatenee\JsonFeed;
 
-use BadMethodCallException;
 use Carbon\Carbon;
 use Mateusjatenee\JsonFeed\Traits\ArrayHelpers;
+use Mateusjatenee\JsonFeed\Traits\ItemGetters;
 
 class FeedItem
 {
-    use ArrayHelpers;
+    use ArrayHelpers, ItemGetters;
 
     /**
      * @var array
@@ -108,23 +108,5 @@ class FeedItem
     public static function setItem($item = [], $attachments = [])
     {
         return new static($item, $attachments = []);
-    }
-
-    /**
-     * Handle dynamic methods calls
-     *
-     * @param $method
-     * @param $parameters
-     * @return mixed
-     */
-    public function __call($method, $parameters)
-    {
-        if (substr($method, 0, 3) == 'get') {
-            return $this->getProperty(substr($method, 3));
-        }
-
-        $className = static::class;
-
-        throw new BadMethodCallException("Call to undefined method {$className}::{$method}()");
     }
 }
