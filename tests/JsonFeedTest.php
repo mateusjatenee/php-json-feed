@@ -135,13 +135,34 @@ class JsonFeedTest extends TestCase
         $this->assertEquals($expected, json_decode($feed->toJson(), true));
     }
 
+    /** @test */
+    public function it_gets_each_property()
+    {
+        $feed = JsonFeed::start($config = $this->getJsonFeedConfig(), $this->getArrayOfItems());
+
+        $this->assertEquals($config['home_page_url'], $feed->getHomePageUrl());
+        $this->assertEquals($config['description'], $feed->getDescription());
+        $this->assertEquals($config['title'], $feed->getTitle());
+        $this->assertEquals($config['feed_url'], $feed->getFeedUrl());
+        $this->assertEquals($config['icon'], $feed->getIcon());
+        $this->assertEquals($config['next_url'], $feed->getNextUrl());
+        $this->assertEquals($config['expired'], $feed->getExpired());
+        $this->assertEquals($config['favicon'], $feed->getFavicon());
+        $this->assertEquals($config['author'], $feed->getAuthor());
+        $this->assertEquals($config['user_comment'], $feed->getUserComment());
+    }
+
     protected function getJsonFeedConfig()
     {
         return [
             'title' => 'My JSON Feed test',
+            'description' => 'Foo description',
             'home_page_url' => 'https://mguimaraes.co',
             'should_not_appear' => 'foobar',
             'feed_url' => 'https://mguimaraes.co/feeds/json',
+            'next_url' => 'https://mguimaraes.co/feeds/json?page=2',
+            'user_comment' => 2,
+            'expired' => false,
             'author' => [
                 'url' => 'https://twitter.com/mateusjatenee',
                 'name' => 'Mateus Guimarães',

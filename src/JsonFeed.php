@@ -2,15 +2,15 @@
 
 namespace Mateusjatenee\JsonFeed;
 
-use BadMethodCallException;
 use Illuminate\Support\Collection;
 use Mateusjatenee\JsonFeed\Exceptions\IncorrectFeedStructureException;
 use Mateusjatenee\JsonFeed\FeedItem;
 use Mateusjatenee\JsonFeed\Traits\ArrayHelpers;
+use Mateusjatenee\JsonFeed\Traits\FeedGetters;
 
 class JsonFeed
 {
-    use ArrayHelpers;
+    use ArrayHelpers, FeedGetters;
 
     /**
      * @var array
@@ -151,17 +151,6 @@ class JsonFeed
     }
 
     /**
-     * Dynamically gets a property
-     *
-     * @param $property
-     * @return string | null
-     */
-    protected function getProperty($property)
-    {
-        return $this->properties[$property] ?? null;
-    }
-
-    /**
      * Gets the JSON Feed version being used.
      *
      * @return string
@@ -213,23 +202,5 @@ class JsonFeed
         return array_map(function ($item) {
             return FeedItem::setItem($item)->toArray();
         }, $this->items);
-    }
-
-    /**
-     * Handle dynamic methods calls
-     *
-     * @param $method
-     * @param $parameters
-     * @return mixed
-     */
-    public function __call($method, $parameters)
-    {
-        if (substr($method, 0, 3) == 'get') {
-            return $this->getProperty(snake_case(substr($method, 3)));
-        }
-
-        $className = static::class;
-
-        throw new BadMethodCallException("Call to undefined method {$className}::{$method}()");
     }
 }
