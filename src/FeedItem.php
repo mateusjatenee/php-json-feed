@@ -59,10 +59,7 @@ class FeedItem
     {
         return array_filter(
             $this->flatMap($this->acceptedProperties, function ($property) {
-
-                $method = $this->getMethodForProperty($property);
-
-                return [$property => $this->$method()];
+                return [$property => $this->getValueForProperty($property)];
             })
         );
     }

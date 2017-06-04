@@ -93,6 +93,15 @@ trait ItemGetters
         return $this->getMethodsMap()[$method] ?? null;
     }
 
+    public function getValueForProperty($property)
+    {
+        if ($method = $this->getMethodForProperty($property)) {
+            return $this->$method();
+        }
+
+        return null;
+    }
+
     public function call($method)
     {
         return method_exists($this->object, $method) ? $this->object->$method() : null;
