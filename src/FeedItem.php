@@ -59,15 +59,11 @@ class FeedItem
     public function build()
     {
         return array_filter(
-            $this->collapse(
-                array_map(function ($property) {
-                    $method = 'get' . studly_case($property);
+            $this->flatMap($this->acceptedProperties, function ($property) {
+                $method = 'get' . studly_case($property);
 
-                    return [
-                        $property => $this->$method(),
-                    ];
-                }, $this->acceptedProperties)
-            )
+                return [$property => $this->$method()];
+            })
         );
     }
 
@@ -78,7 +74,6 @@ class FeedItem
      */
     public function toArray()
     {
-
         return $this->build();
     }
 

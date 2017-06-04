@@ -37,4 +37,9 @@ trait ArrayHelpers
 
         return $results;
     }
+
+    protected function flatMap($array, $callback)
+    {
+        return $this->collapse(array_map($callback, $array));
+    }
 }
